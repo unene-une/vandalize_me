@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VandalizeMe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#39FF14">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <header class="header-nav brutal-box">
+    <h1 class="giant-logo">VANDALIZEME</h1>
+    <nav class="tabs">
+      <button class="brutal-btn tab-btn active" data-tab="practice">TODAY</button>
+      <button class="brutal-btn tab-btn" data-tab="themes">THEMES</button>
+      <button class="brutal-btn tab-btn" data-tab="calendar">CALENDAR</button>
+      <button class="brutal-btn tab-btn" data-tab="gallery">GALLERY</button>
+    </nav>
+  </header>
+
+  <main id="app-content">
+    <!-- TODAY'S PRACTICE VIEW -->
+    <div id="view-practice" class="view active">
+      <div class="theme-bar brutal-box">
+        <h2 id="current-theme">THEME: <span>...</span></h2>
+        <button id="refresh-theme-btn" class="brutal-btn accent-green">CHANGE</button>
+      </div>
+
+      <div class="workspace">
+        <aside class="sidebar">
+          <div class="toolbar brutal-box">
+            <h3>TOOLS</h3>
+            <div class="tool-group">
+              <button id="tool-brush" class="brutal-btn active">BRUSH</button>
+              <button id="tool-eraser" class="brutal-btn">ERASER</button>
+            </div>
+            
+            <label for="brush-size">SIZE: <span id="size-val">5</span>px</label>
+            <input type="range" id="brush-size" min="1" max="50" value="5">
+
+            <div class="tool-group" style="margin-top: 15px; margin-bottom: 10px;">
+              <button id="btn-undo" class="brutal-btn">UNDO</button>
+              <button id="btn-redo" class="brutal-btn">REDO</button>
+            </div>
+            <button id="btn-clear" class="brutal-btn accent-red" style="width: 100%; margin-bottom: 15px; transform: rotate(1deg) translateY(2px);">CLEAR</button>
+            
+            <div style="margin-top: 15px;">
+              <label for="canvas-size" style="display:block; margin-bottom:5px;">CANVAS SIZE:</label>
+              <select id="canvas-size" class="brutal-box" style="width:100%; padding: 8px; font-weight:bold; font-size:1rem; cursor:pointer;">
+                <option value="800x600">800 &times; 600 (横長)</option>
+                <option value="600x600">600 &times; 600 (正方形)</option>
+                <option value="600x800">600 &times; 800 (縦長)</option>
+              </select>
+            </div>
+            <button id="btn-save" class="brutal-btn accent-green" style="margin-top:10px; width:100%;">SAVE TODAY</button>
+            <button id="btn-download" class="brutal-btn accent-red" style="margin-top:10px; width:100%;">DOWNLOAD PNG</button>
+          </div>
+        </aside>
+
+        <div class="canvas-container brutal-box">
+          <canvas id="bg-canvas" width="800" height="600"></canvas>
+          <canvas id="fg-canvas" width="800" height="600"></canvas>
+        </div>
+
+        <aside class="sidebar">
+          <div id="color-picker-container" class="brutal-box">
+            <h3>COLOR</h3>
+            
+            <div class="cp-tabs" style="display:flex; margin-bottom: 10px; gap: 5px;">
+              <button class="brutal-btn cp-tab-btn active" data-cp="wheel" style="flex:1; padding: 5px; font-size: 0.8rem;">WHEEL</button>
+              <button class="brutal-btn cp-tab-btn" data-cp="hsb" style="flex:1; padding: 5px; font-size: 0.8rem;">HSB</button>
+              <button class="brutal-btn cp-tab-btn" data-cp="rgb" style="flex:1; padding: 5px; font-size: 0.8rem;">RGB</button>
+            </div>
+
+            <div id="cp-view-wheel" class="cp-view">
+              <div class="cp-wrapper">
+                <canvas id="cp-hue-sat" width="200" height="200"></canvas>
+              </div>
+            </div>
+
+            <div id="cp-view-hsb" class="cp-view" style="display:none; flex-direction:column; gap:10px;">
+              <div><label>H</label><input type="range" id="hsb-h" min="0" max="360" value="0"></div>
+              <div><label>S</label><input type="range" id="hsb-s" min="0" max="100" value="100"></div>
+              <div><label>B</label><input type="range" id="hsb-b" min="0" max="100" value="100"></div>
+            </div>
+
+            <div id="cp-view-rgb" class="cp-view" style="display:none; flex-direction:column; gap:10px;">
+              <div><label>R</label><input type="range" id="rgb-r" min="0" max="255" value="255"></div>
+              <div><label>G</label><input type="range" id="rgb-g" min="0" max="255" value="0"></div>
+              <div><label>B</label><input type="range" id="rgb-b" min="0" max="255" value="0"></div>
+            </div>
+
+            <div style="margin-top: 15px;">
+              <label for="color-hex" style="display:block; margin-bottom:5px;">HEX COLOR:</label>
+              <input type="text" id="color-hex" value="#FF2E2E" maxlength="7" />
+            </div>
+            <div style="margin-top: 10px;">
+              <label for="color-alpha" style="display:block; margin-bottom:5px;">OPACITY:</label>
+              <input type="range" id="color-alpha" min="0" max="100" value="100">
+            </div>
+
+            <div id="cp-presets" style="margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+              <button class="preset-btn" style="background:#0F172A;" data-hex="#0F172A"></button>
+              <button class="preset-btn" style="background:#FFFFFF;" data-hex="#FFFFFF"></button>
+              <button class="preset-btn" style="background:#FF2E2E;" data-hex="#FF2E2E"></button>
+              <button class="preset-btn" style="background:#3B82F6;" data-hex="#3B82F6"></button>
+              <button class="preset-btn" style="background:#39FF14;" data-hex="#39FF14"></button>
+              <button class="preset-btn" style="background:#FBBF24;" data-hex="#FBBF24"></button>
+              <button class="preset-btn" style="background:#8B5A2B;" data-hex="#8B5A2B"></button>
+              <button class="preset-btn" style="background:#9CA3AF;" data-hex="#9CA3AF"></button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- CALENDAR VIEW -->
+    <div id="view-calendar" class="view">
+      <div class="brutal-box pad-20">
+        <h2>CALENDAR</h2>
+        <div id="calendar-grid"></div>
+      </div>
+    </div>
+
+    <!-- THEMES VIEW -->
+    <div id="view-themes" class="view">
+      <div class="brutal-box pad-20" style="width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px;">
+        <h2>THEMES (お題設定)</h2>
+        <p>1行に1つのお題を入力してください。改行で区切られます。<br>空にした場合は保存できません。</p>
+        <textarea id="themes-editor" class="brutal-box" style="width: 100%; height: 300px; padding: 10px; font-size: 1.1rem; line-height: 1.5; resize: vertical;"></textarea>
+        <div style="display: flex; gap: 15px; width: 100%;">
+          <button id="btn-reset-themes" class="brutal-btn accent-red" style="flex: 1;">RESET (初期化)</button>
+          <button id="btn-save-themes" class="brutal-btn accent-green" style="flex: 2;">SAVE (保存)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY VIEW -->
+    <div id="view-gallery" class="view">
+      <div class="brutal-box pad-20" style="width: 100%;">
+        <h2>GALLERY</h2>
+        <p id="gallery-storage-info" style="font-weight: bold; margin-top: 10px;"></p>
+        <div id="gallery-grid"></div>
+      </div>
+    </div>
+  </main>
+
+  <dialog id="calendar-popup" class="brutal-box" style="padding: 20px; max-width: 90vw; max-height: 90vh; text-align: center; border: var(--border-thick); box-shadow: var(--shadow-sm); outline: none;">
+    <h3 id="popup-title" style="margin-bottom: 10px;"></h3>
+    <img id="popup-img" src="" style="max-width: 100%; max-height: 60vh; border: 2px solid var(--black); margin-bottom: 15px;" />
+    <br>
+    <button id="popup-close" class="brutal-btn accent-red">CLOSE</button>
+  </dialog>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(req => console.log('SW Registered', req))
+          .catch(err => console.error('SW Error', err));
+      });
+    }
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
