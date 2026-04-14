@@ -379,32 +379,29 @@ input[type="range"]::-moz-range-thumb:hover {
 
 /* --- Mobile Appification / Responsive adjustments --- */
 
-/* タッチデバイス（スマホ・タブレット）の横画面でキャンバスが収まるようにスケール
-   hover:none + pointer:coarse = マウスなしのタッチデバイス限定。PCには適用されない */
-@media screen and (max-height: 800px) and (hover: none) and (pointer: coarse) {
-  .canvas-container {
-    transform-origin: top left;
-    transform: scale(0.75);
-    margin-bottom: -150px;
-    margin-right: -200px;
-  }
-}
-
-@media screen and (max-height: 500px) and (hover: none) and (pointer: coarse) {
-  .canvas-container {
-    transform: scale(0.55);
-    margin-bottom: -270px;
-    margin-right: -360px;
-  }
-}
-
-/* タッチデバイスの横画面: zoom でスケーリングするため overflow は不要 */
+/* タッチデバイスの横画面: JS の zoom スケーリングに合わせてヘッダーをコンパクト化 */
 @media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  .header-nav {
+    padding: 4px 15px;
+    min-height: 0;
+  }
+  .giant-logo {
+    font-size: 2rem;
+    top: -3px;
+    left: 15px;
+    letter-spacing: -2px;
+    transform: rotate(-4deg);
+  }
+  .tabs {
+    gap: 8px;
+  }
   #app-content {
-    overflow-x: hidden;
+    overflow: hidden;
+    padding: 10px 15px;
     align-items: center;
   }
   .view {
+    gap: 10px;
     align-items: center;
   }
   .workspace {

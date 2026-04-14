@@ -164,17 +164,35 @@ async function init() {
 }
 
 function applyMobileScale() {
+  const appContent = document.getElementById('app-content');
   const workspace = document.querySelector('.workspace');
-  if (!workspace) return;
-  // タッチデバイス（スマホ・タブレット）かつ横画面の場合のみ適用
+  if (!appContent) return;
+
   const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   const isLandscape = window.innerWidth > window.innerHeight;
+
   if (isTouch && isLandscape) {
-    const WORKSPACE_WIDTH = 1380; // sidebar×2 + canvas + gaps
-    const scale = Math.min(1, window.innerWidth / WORKSPACE_WIDTH);
-    workspace.style.zoom = scale;
+    // コンパクトヘッダーの高さ（CSSで padding:4px×2 + ロゴ約32px ≈ 44px）
+    const COMPACT_HEADER_H = 44;
+    // #app-content 内のコンテンツの等倍時の幅・高さ
+    // 幅: サイドバー×2(500) + キャンバス(800) + gap×2(80) + padding×2(30) = 1410
+    const CONTENT_W = 1410;
+    // 高さ: padding(20) + お題バー(70) + gap(10) + キャンバス(600) = 700
+    const CONTENT_H = 700;
+
+    const availW = window.innerWidth;
+    const availH = window.innerHeight - COMPACT_HEADER_H;
+
+    const scaleW = availW / CONTENT_W;
+    const scaleH = availH / CONTENT_H;
+    const scale = Math.min(scaleW, scaleH, 1);
+
+    appContent.style.zoom = scale;
+    // workspace への個別zoom は不要になったのでリセット
+    if (workspace) workspace.style.zoom = '';
   } else {
-    workspace.style.zoom = '';
+    appContent.style.zoom = '';
+    if (workspace) workspace.style.zoom = '';
   }
 }
 

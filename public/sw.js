@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v-oekaki-1.2.0';
+const CACHE_NAME = 'v-oekaki-1.3.0';
 
 // Network First strategy
 self.addEventListener('fetch', (event) => {
