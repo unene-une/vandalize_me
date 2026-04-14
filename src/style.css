@@ -73,7 +73,9 @@ h1, h2, h3, .brutal-btn, label {
   padding: 30px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 中央寄せ */
+  align-items: flex-start; /* override center to allow horizontal scroll without left-clipping */
+  overflow-x: auto;
+  width: 100%;
 }
 
 /* Views */
@@ -108,9 +110,10 @@ h1, h2, h3, .brutal-btn, label {
 /* Workspace (Canvas + Sidebar) */
 .workspace {
   display: flex;
-  gap: 40px;
-  justify-content: center;
-  width: 100%;
+  gap: 30px;
+  justify-content: flex-start;
+  width: max-content; /* allows proper scrolling on overflow */
+  margin: 0 auto;
 }
 
 /* Canvas Container */
@@ -377,18 +380,13 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* --- Mobile Appification / Responsive adjustments --- */
-@media screen and (max-width: 1400px) {
-  .workspace {
-    flex-wrap: wrap;
-  }
-}
-
 @media screen and (max-height: 800px) {
   /* 画面の高さが低いモバイルなどの横画面でキャンバスがはみ出さないようにスケール表示 */
   .canvas-container {
-    transform-origin: top center;
+    transform-origin: top left;
     transform: scale(0.8);
     margin-bottom: -120px; /* スケールした分の余白を詰める */
+    margin-right: -160px; /* 横幅の余白も詰める */
   }
 }
 
@@ -396,6 +394,7 @@ input[type="range"]::-moz-range-thumb:hover {
   .canvas-container {
     transform: scale(0.6);
     margin-bottom: -240px;
+    margin-right: -320px;
   }
 }
 
@@ -425,7 +424,7 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* 縦画面（ポートレート）の強制禁止オーバーレイ */
-@media screen and (orientation: portrait) {
+@media screen and (orientation: portrait), screen and (max-aspect-ratio: 1/1) {
   body::before {
     content: "端末を横にして使用してください\A (Please rotate your device)";
     white-space: pre-wrap;
