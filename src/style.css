@@ -399,6 +399,31 @@ input[type="range"]::-moz-range-thumb:hover {
   }
 }
 
+/* 画面幅が狭い場合のヘッダーの重なり防止 */
+@media screen and (max-width: 900px) {
+  .header-nav {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    min-height: auto;
+  }
+  .giant-logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+    text-align: center;
+    transform: rotate(-3deg);
+  }
+  .tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 /* 縦画面（ポートレート）の強制禁止オーバーレイ */
 @media screen and (orientation: portrait) {
   body::before {
@@ -418,7 +443,7 @@ input[type="range"]::-moz-range-thumb:hover {
     padding: 20px;
   }
   
-  #app-content {
+  #app-content, .header-nav {
     display: none !important;
   }
 }
