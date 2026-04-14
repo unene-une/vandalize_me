@@ -73,9 +73,7 @@ h1, h2, h3, .brutal-btn, label {
   padding: 30px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* override center to allow horizontal scroll without left-clipping */
-  overflow-x: auto;
-  width: 100%;
+  align-items: center;
 }
 
 /* Views */
@@ -110,10 +108,10 @@ h1, h2, h3, .brutal-btn, label {
 /* Workspace (Canvas + Sidebar) */
 .workspace {
   display: flex;
-  gap: 30px;
-  justify-content: flex-start;
-  width: max-content; /* allows proper scrolling on overflow */
-  margin: 0 auto;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Canvas Container */
@@ -380,25 +378,40 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 /* --- Mobile Appification / Responsive adjustments --- */
-@media screen and (max-height: 800px) {
-  /* 画面の高さが低いモバイルなどの横画面でキャンバスがはみ出さないようにスケール表示 */
+
+/* タッチデバイス（スマホ・タブレット）の横画面でキャンバスが収まるようにスケール
+   hover:none + pointer:coarse = マウスなしのタッチデバイス限定。PCには適用されない */
+@media screen and (max-height: 800px) and (hover: none) and (pointer: coarse) {
   .canvas-container {
     transform-origin: top left;
-    transform: scale(0.8);
-    margin-bottom: -120px; /* スケールした分の余白を詰める */
-    margin-right: -160px; /* 横幅の余白も詰める */
+    transform: scale(0.75);
+    margin-bottom: -150px;
+    margin-right: -200px;
   }
 }
 
-@media screen and (max-height: 500px) {
+@media screen and (max-height: 500px) and (hover: none) and (pointer: coarse) {
   .canvas-container {
-    transform: scale(0.6);
-    margin-bottom: -240px;
-    margin-right: -320px;
+    transform: scale(0.55);
+    margin-bottom: -270px;
+    margin-right: -360px;
   }
 }
 
-/* 画面幅が狭い場合のヘッダーの重なり防止 */
+/* タッチデバイスの横画面はみ出し分を横スクロールで対応 */
+@media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  #app-content {
+    overflow-x: auto;
+    align-items: flex-start;
+  }
+  .workspace {
+    width: max-content;
+    justify-content: flex-start;
+    margin: 0;
+  }
+}
+
+/* 画面幅が狭い場合のヘッダーの重なり防止（PC含む小画面向け） */
 @media screen and (max-width: 900px) {
   .header-nav {
     flex-direction: column;
@@ -423,8 +436,9 @@ input[type="range"]::-moz-range-thumb:hover {
   }
 }
 
-/* 縦画面（ポートレート）の強制禁止オーバーレイ */
-@media screen and (orientation: portrait), screen and (max-aspect-ratio: 1/1) {
+/* 縦画面（ポートレート）の強制禁止オーバーレイ
+   タッチデバイス限定（PCで縦長ウィンドウにしても発動しない） */
+@media screen and (orientation: portrait) and (hover: none) and (pointer: coarse) {
   body::before {
     content: "端末を横にして使用してください\A (Please rotate your device)";
     white-space: pre-wrap;
