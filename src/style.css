@@ -177,6 +177,7 @@ canvas#bg-canvas, canvas#fg-canvas {
 }
 .cp-view.active {
   display: flex;
+  justify-content: center;
 }
 .preset-btn {
   height: 30px;

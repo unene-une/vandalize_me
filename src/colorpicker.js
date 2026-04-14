@@ -34,8 +34,9 @@ export function setupColorPicker() {
       const targetId = `cp-view-${btn.dataset.cp}`;
       const target = document.getElementById(targetId);
       if(target) {
-        target.style.display = btn.dataset.cp === 'wheel' ? 'block' : 'flex';
+        target.style.display = 'flex';
         target.classList.add('active');
+        if (btn.dataset.cp === 'wheel') drawColorPicker();
       }
     });
   });
