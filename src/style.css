@@ -333,6 +333,7 @@ input[type="range"]::-moz-range-thumb:hover {
 .tab-btn:nth-child(1) { transform: rotate(-2deg) translateY(2px); }
 .tab-btn:nth-child(2) { transform: rotate(1.5deg); }
 .tab-btn:nth-child(3) { transform: rotate(-1deg) translateY(-3px); }
+.tab-btn:nth-child(4) { transform: rotate(2.5deg) translateY(1px); }
 
 .tool-group .brutal-btn:first-child { transform: rotate(-2.5deg) translateX(-2px); }
 .tool-group .brutal-btn:last-child { transform: rotate(2deg) translateY(3px); }
