@@ -49,6 +49,13 @@ export async function renderGallery() {
       const card = document.createElement('div');
       card.className = 'brutal-box gallery-card';
       card.style.padding = '10px';
+      // ネオブルータリズム: カードごとにランダムな傾き
+      const angle = (Math.random() - 0.5) * 4; // -2 to +2 deg
+      const tx = (Math.random() - 0.5) * 6;
+      card.style.transform = `rotate(${angle.toFixed(1)}deg) translateX(${tx.toFixed(1)}px)`;
+      card.style.transition = 'transform 0.15s';
+      card.addEventListener('mouseover', () => { card.style.transform = `rotate(0deg) scale(1.03)`; });
+      card.addEventListener('mouseout', () => { card.style.transform = `rotate(${angle.toFixed(1)}deg) translateX(${tx.toFixed(1)}px)`; });
       
       const img = document.createElement('img');
       const objUrl = URL.createObjectURL(rec.imageBlob);
