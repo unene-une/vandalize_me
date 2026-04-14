@@ -404,6 +404,9 @@ input[type="range"]::-moz-range-thumb:hover {
     overflow-x: auto;
     align-items: flex-start;
   }
+  .view {
+    align-items: flex-start; /* 左端からスクロール開始させる */
+  }
   .workspace {
     width: max-content;
     justify-content: flex-start;
