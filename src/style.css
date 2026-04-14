@@ -398,18 +398,18 @@ input[type="range"]::-moz-range-thumb:hover {
   }
 }
 
-/* タッチデバイスの横画面はみ出し分を横スクロールで対応 */
+/* タッチデバイスの横画面: zoom でスケーリングするため overflow は不要 */
 @media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) {
   #app-content {
-    overflow-x: auto;
-    align-items: flex-start;
+    overflow-x: hidden;
+    align-items: center;
   }
   .view {
-    align-items: flex-start; /* 左端からスクロール開始させる */
+    align-items: center;
   }
   .workspace {
-    width: max-content;
-    justify-content: flex-start;
+    width: 100%;
+    justify-content: center;
     margin: 0;
   }
 }

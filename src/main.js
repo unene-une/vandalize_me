@@ -131,6 +131,8 @@ async function init() {
   setupCanvas();
   setupColorPicker();
   initThemesUI();
+  applyMobileScale();
+  window.addEventListener('resize', applyMobileScale);
   
   // Tab handling
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -159,6 +161,21 @@ async function init() {
     applyChaoticTheme(newTheme);
     state.theme = newTheme;
   });
+}
+
+function applyMobileScale() {
+  const workspace = document.querySelector('.workspace');
+  if (!workspace) return;
+  // タッチデバイス（スマホ・タブレット）かつ横画面の場合のみ適用
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const isLandscape = window.innerWidth > window.innerHeight;
+  if (isTouch && isLandscape) {
+    const WORKSPACE_WIDTH = 1380; // sidebar×2 + canvas + gaps
+    const scale = Math.min(1, window.innerWidth / WORKSPACE_WIDTH);
+    workspace.style.zoom = scale;
+  } else {
+    workspace.style.zoom = '';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
